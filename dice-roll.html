@@ -1,12 +1,15 @@
+
+
 <!DOCTYPE html>
 <html>
     <head>
         <title> Dice Rolls </title>
         <meta charset = "utf-8" >
-        <style>
+	<meta content="width=device-width,height=device-height,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" id="viewport" name="viewport">
+    <style>
             body {
                 background-color: #1F1C1C; /*Near black grey*/
-                margin: 0 0;
+                
             }
             
             button {
@@ -14,14 +17,18 @@
             }
             
             .row {
-                width: 880px;
+                width: 100%;
                 margin: 10px auto;
                 clear: both;
                 overflow: hidden;
+                display: inline-block;
+                vertical-align: middle;
+                line-height: normal;
+            
             }
             
             .dice-box {
-                width: 200px;
+                width: 40%;
                 height: 100px;
                 margin: 10px;
                 position: relative;
@@ -36,7 +43,7 @@
                 height: 50px;
                 padding: 0;
                 position: absolute;
-                left: 0;
+                right: 22%;
                 top: 0;
                 color: #FFFFFF; /*White*/
                 background-color: #DD5555; /*Red*/
@@ -56,7 +63,7 @@
                 height: 50px;
                 padding: 0;
                 position: absolute;
-                left: 0;
+                right: 22%;
                 bottom: 0;
                 color: #FFFFFF; /*White*/
                 background-color: #DD5555; /*Red*/
@@ -64,6 +71,7 @@
                 text-align: center;
                 line-height: 50px;
                 border-radius: 0 0 0 6px;
+             z-index: 600;
             }
             
             .dice-down:hover {
@@ -102,16 +110,16 @@
             }
             
             .result {
-                width: 860px;
+                width: 30%;
                 height: 100px;
                 clear: both;
                 color: #FFFFFF; /*White*/
                 background-color: #4343D4; /*Blue*/
                 text-align: center;
                 margin: 10px auto;
-                border-radius: 4px;
+                border-radius: 10px;
                 box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-                line-height: 100px;
+                line-height: 30px;
             }
             
             .result span {
@@ -128,7 +136,7 @@
             }
             
             #resultAll {
-                width: 860px;
+                width: 30%;
                 height: 40px;
                 color: #FFFFFF;
                 background-color: #4343D4; /*Dark Blue*/
@@ -156,10 +164,10 @@
             #d2, #d4, #d6, #d8, #d10, #d12, #d16, #d20, #d24, #d30, #d50, #d100 {
                 color: #000000; /*Black*/
             }
-            
+           
         </style>
         <script>
-            var dNumList = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            var dNumList = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
             var dDiceList = [2, 4, 6, 8, 10, 12, 16, 20, 24, 30, 50, 100];
             var toggleList = [false, false];
             
@@ -195,32 +203,39 @@
                 document.getElementById(dId).innerHTML = dNumList[dNum];
             };
             
-            
-            function resultRoll(dNum, dDice) {
+            function resultRoll2() {
+//			var dNum = document.getElementById("numDice").value;
+	//		var dDice = document.getElementById("diceMax").value;			
                 var result = 0;
-                var dMax = dNumList[dNum] * dDice;
-                var dMin = 1 *dNumList[dNum];        
-                
-                result = Math.round(Math.random() * (dMax - dMin) + dMin)
-                if (toggleList[1] == true) {
-                    if (result != dNumList[12]) {
-                        result = Math.round(Math.random() * (dMax - dMin) + dMin) 
-                    };
-                };
-                document.getElementById("result").innerHTML = result;
+                const maxDieVal = document.getElementById("diceMax").value;
+                const diceNumber = document.getElementById("numDice").value;    
+				if(!diceNumber || !maxDieVal) return;
+				for(let dNum = 0; dNum<diceNumber; dNum++){
+				result += Math.ceil(Math.random()* maxDieVal);
+			}   
+             document.getElementById("result").innerHTML += "　" + result;
 //                document.getElementById('prevResult').innerHTML = prevResult;
             };
-            
-            function resultRollAll() {
-                var dMax = 0;
-                var dMin = 0;
+			
+            function resultRoll(dNum, dDice) {
+                var result = 0;
+                const maxDieVal = 1 * dDice;
+                const diceNumber = 1 *dNumList[dNum];    
+				if(!diceNumber || !maxDieVal) return;
+				for(let dNum = 0; dNum<diceNumber; dNum++){
+				result += Math.ceil(Math.random()* maxDieVal);
+			}
+
+				
                 
-                for (i = 0; i < dNumList.length; i++) {
-                    if (dNumList[i] != 0) {
-                        dMin += dNumList[i] * dDiceList[i];
-                        console.log(dNumList[0]);
-                    };
-                };
+             document.getElementById("result").innerHTML += "　" + result;
+//                document.getElementById('prevResult').innerHTML = prevResult;
+            };
+			
+			function ClearAll() {
+                var result = "";
+                document.getElementById("result").innerHTML= result;
+//                document.getElementById('prevResult').innerHTML = prevResult;
             };
             
             function toggle(tog, value) {
@@ -244,91 +259,46 @@
         </script>
     </head>
     <body>
-        <div id = "toggleBox" >
-            <button id = "togResult" class = "toggle" type = "button" onclick = "toggle('.resultAll', 'resultAll')" ></button>
-        </div>
-        <div class = "resultAll" style = "display: none" >
-            <button id = "resultAll" type = "button" onclick = "resultRollAll()" > <span> Roll all </span></button>
+        <div class = "row" >
+            <button id = "resultAll" type = "button" onclick = "ClearAll()" > <span> Clear all </span></button>
         </div>
         <div class = "row" >
             <div class = "dice-box" > <!--Array Position: 0-->
                 <button class = "dice-up" type = "button" onclick = "dNumPlus(0, 1, 'd2')" > <span> Up </span> </button>
                 <button class = "dice-down" type = "button" onclick = "dNumTake(0, 1, 'd2')" > <span> Down </span></button>
-                <button class = "dice" type = "button" onclick = "resultRoll(0, 2)" > <span id = "d2" > 0 </span><span> d2 </span> </button>
+                <button class = "dice" type = "button" onclick = "resultRoll(0, 2)" > <span id = "d2" > 1 </span><span> d2 </span> </button>
 
             </div>
-            
-            <div class = "dice-box" > <!--Array Position: 1-->
-                <button class = "dice-up" type = "button" onclick = "dNumPlus(1, 1, 'd4')" > <span> Up </span> </button>
-                <button class = "dice-down" type = "button" onclick = "dNumTake(1, 1, 'd4')" > <span> Down </span></button>
-                <button class = "dice" type = "button" onclick = "resultRoll(1, 4)" > <span id = "d4" > 0 </span><span> d4 </span> </button>
-            </div>
-            
+                        
             <div class = "dice-box" > <!--Array Position: 2-->
                 <button class = "dice-up" type = "button" onclick = "dNumPlus(2, 1, 'd6')" > <span> Up </span> </button>
                 <button class = "dice-down" type = "button" onclick = "dNumTake(2, 1, 'd6')" > <span> Down </span></button>
-                <button class = "dice" type = "button" onclick = "resultRoll(2, 6)" > <span id = "d6" > 0 </span><span> d6 </span> </button>
+                <button class = "dice" type = "button" onclick = "resultRoll(2, 6)" > <span id = "d6" > 1 </span><span> d6 </span> </button>
             </div>
-            
-            <div class = "dice-box" > <!--Array Position: 3-->
-                <button class = "dice-up" type = "button" onclick = "dNumPlus(3, 1, 'd8')" > <span> Up </span> </button>
-                <button class = "dice-down" type = "button" onclick = "dNumTake(3, 1, 'd8')" > <span> Down </span></button>
-                <button class = "dice" type = "button" onclick = "resultRoll(3, 8)" > <span id = "d8" > 0 </span><span> d8 </span> </button>
-            </div>
-        </div>
+       </div>
         
         <div class = "row" >
-            <div class = "dice-box" > <!--Array Position: 4-->
+			<div class = "dice-box" > <!--Array Position: 4-->
                 <button class = "dice-up" type = "button" onclick = "dNumPlus(4, 1, 'd10')" > <span> Up </span> </button>
                 <button class = "dice-down" type = "button" onclick = "dNumTake(4, 1, 'd10')" > <span> Down </span></button>
-                <button class = "dice" type = "button" onclick = "resultRoll(4, 10)" > <span id = "d10" > 0 </span><span> d10 </span> </button>
+                <button class = "dice" type = "button" onclick = "resultRoll(4, 10)" > <span id = "d10" > 1 </span><span> d10 </span> </button>
             </div>
-            
-            <div class = "dice-box" > <!--Array Position: 5-->
-                <button class = "dice-up" type = "button" onclick = "dNumPlus(5, 1, 'd12')" > <span> Up </span> </button>
-                <button class = "dice-down" type = "button" onclick = "dNumTake(5, 1, 'd12')" > <span> Down </span></button>
-                <button class = "dice" type = "button" onclick = "resultRoll(5, 12)" > <span id = "d12" > 0 </span><span> d12 </span> </button>
-            </div>
-            
-            <div class = "dice-box" > <!--Array Position: 6-->
-                <button class = "dice-up" type = "button" onclick = "dNumPlus(6, 1, 'd16')" > <span> Up </span> </button>
-                <button class = "dice-down" type = "button" onclick = "dNumTake(6, 1, 'd16')" > <span> Down </span></button>
-                <button class = "dice" type = "button" onclick = "resultRoll(6, 16)" > <span id = "d16" > 0 </span><span> d16 </span> </button>
-            </div>
-            
-            <div class = "dice-box" > <!--Array Position: 7-->
-                <button class = "dice-up" type = "button" onclick = "dNumPlus(7, 1, 'd20')" > <span> Up </span> </button>
-                <button class = "dice-down" type = "button" onclick = "dNumTake(7, 1, 'd20')" > <span> Down </span></button>
-                <button class = "dice" type = "button" onclick = "resultRoll(7, 20)" > <span id = "d20" > 0 </span><span> d20 </span> </button>
-            </div>            
-        </div>
-        
-        <div class = "row" >
-            <div class = "dice-box" > <!--Array Position: 8-->
-                <button class = "dice-up" type = "button" onclick = "dNumPlus(8, 1, 'd24')" > <span> Up </span> </button>
-                <button class = "dice-down" type = "button" onclick = "dNumTake(8, 1, 'd24')" > <span> Down </span></button>
-                <button class = "dice" type = "button" onclick = "resultRoll(8, 24)" > <span id = "d24" > 0 </span><span> d24 </span> </button>
-            </div>
-            
-            <div class = "dice-box" > <!--Array Position: 9-->
-                <button class = "dice-up" type = "button" onclick = "dNumPlus(9, 1, 'd30')" > <span> Up </span> </button>
-                <button class = "dice-down" type = "button" onclick = "dNumTake(9, 1, 'd30')" > <span> Down </span></button>
-                <button class = "dice" type = "button" onclick = "resultRoll(9, 30)" > <span id = "d30"> 0 </span><span> d30 </span> </button>
-            </div>
-            
-            <div class = "dice-box" > <!--Array Position: 10-->
-                <button class = "dice-up" type = "button" onclick = "dNumPlus(10, 1, 'd50')" > <span> Up </span> </button>
-                <button class = "dice-down" type = "button" onclick = "dNumTake(10, 1, 'd50')" > <span> Down </span></button>
-                <button class = "dice" type = "button" onclick = "resultRoll(10, 50)" > <span id = "d50" > 0 </span><span> d50 </span> </button>
-            </div>
-            
+			
             <div class = "dice-box" > <!--Array Position: 11-->
                 <button class = "dice-up" type = "button" onclick = "dNumPlus(11, 1, 'd100')" > <span> Up </span> </button>
                 <button class = "dice-down" type = "button" onclick = "dNumTake(11, 1, 'd100')" > <span> Down </span></button>
-                <button class = "dice" type = "button" onclick = "resultRoll(11, 100)" > <span  id = "d100" > 0 </span><span> d100 </span> </button>
-            </div>
-        </div>
+                <button class = "dice" type = "button" onclick = "resultRoll(11, 100)" > <span  id = "d100" > 1 </span><span> d100 </span> </button>
+            </div>            
+
+		</div>
         
+        <div class = "row" >
+            <div class = "dice-box" > <!--Array Position: 8-->
+                <input class = "dice-up" value=2 type = "number" id="numDice" > <span>  </span> </button>
+                <input class = "dice-down" value=6 type = "number" id="diceMax" > <span>  </span></button>
+                <button class = "dice" type = "button" onclick = "resultRoll2()" > <span id = "dother" > 2 d6 </span> 
+            </div>    
+        </div>
         <div class = "result" >
             <span> Result: </span> <span id = "result"> </span>
         </div>
